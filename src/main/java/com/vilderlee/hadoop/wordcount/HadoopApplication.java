@@ -10,6 +10,8 @@ import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
+import java.util.Random;
+
 public class HadoopApplication {
 
     public static void main(String[] args) throws Exception {
@@ -18,9 +20,9 @@ public class HadoopApplication {
         // 即使没有下面这行,也可以本地运行 因\hadoop-mapreduce-client-core-2.7.4.jar!\mapred-default.xml 中默认的参数就是 local
         //conf.set("mapreduce.framework.name","local");
 
-        conf.addResource("core-site.xml");
-        conf.addResource("hdfs-site.xml");
-        conf.addResource("yarn-site.xml");
+//        conf.addResource("core-site.xml");
+//        conf.addResource("hdfs-site.xml");
+//        conf.addResource("yarn-site.xml");
 
         Job job = Job.getInstance(conf);
 
@@ -41,20 +43,20 @@ public class HadoopApplication {
         // job.setNumReduceTasks(3); //ReduceTask个数
 
         //如果业务有需求，就可以设置combiner组件
-        job.setCombinerClass(WordCountReducer.class);
+//        job.setCombinerClass(WordCountReducer.class);
 
         //指定本次mr 输入的数据路径 和最终输出结果存放在什么位置
-//        Path inputPath = new Path("F:\\wordcount\\input");
-//        Path outputPath = new Path("F:\\wordcount\\output");
-        Path inputPath = new Path("/wordcount/input");
-        Path outputPath = new Path("/wordcount/output");
+                Random random = new Random();
+        Path inputPath = new Path("F:\\wordcount\\input");
+        Path outputPath = new Path("F:\\wordcount\\output" + random.nextInt());
+//        Path inputPath = new Path("/wordcount/input");
+//        Path outputPath = new Path("/wordcount/output");
 
-        FileSystem fileSystem = FileSystem.newInstance(conf);
-        if (!fileSystem.exists(inputPath)) {
-            fileSystem.mkdirs(inputPath);
-            fileSystem.copyFromLocalFile(new Path("F:\\wordcount\\input"), inputPath);
-        }
-
+//        FileSystem fileSystem = FileSystem.newInstance(conf);
+//        if (!fileSystem.exists(inputPath)) {
+//            fileSystem.mkdirs(inputPath);
+//            fileSystem.copyFromLocalFile(new Path("F:\\wordcount\\input"), inputPath);
+//        }
         FileInputFormat.setInputPaths(job, inputPath);
         FileOutputFormat.setOutputPath(job, outputPath);
         //如果出现0644错误或找不到winutils.exe,则需要设置windows环境和相关文件.

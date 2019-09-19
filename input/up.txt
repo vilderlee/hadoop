@@ -1,0 +1,1 @@
+{"SystemNo": "0001","Data": {"stream": "up","amt": "100","status": "10"}}
